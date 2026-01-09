@@ -1,1 +1,15 @@
-python -m venv .venv
+Make sure Python is version 3.12.2
+
+Windows:
+Create virtual environment
+    python -m venv .venv
+    source .\.venv\Scripts\Activate.ps1
+
+Install PyTorch
+    pip install torch torchvision torchaudio
+
+Install plotting and visualization basics
+    pip install numpy matplotlib scipy tqdm pillow
+
+
+
