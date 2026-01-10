@@ -1,1 +1,0 @@
-# Residuals for the linear case

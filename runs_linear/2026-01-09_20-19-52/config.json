@@ -1,0 +1,23 @@
+{
+  "beta": 0.3,
+  "mu": 0.02,
+  "Gamma": 0.5,
+  "T": 6.0,
+  "seed": 0,
+  "epochs": 4000,
+  "lr": 0.002,
+  "N_f": 1200,
+  "N_b": 300,
+  "N_i": 400,
+  "w_pde": 1.0,
+  "w_bc": 20.0,
+  "w_ic": 20.0,
+  "w_iv": 5.0,
+  "hidden": 64,
+  "depth": 5,
+  "out_dir": "runs_linear",
+  "ckpt_name": "pinn_linear.pt",
+  "gif_name": "linear_solution.gif",
+  "gif3d_name": "linear_solution_3d.gif",
+  "run_dir": "runs_linear\\2026-01-09_20-19-52"
+}

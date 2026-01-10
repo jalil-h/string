@@ -1,0 +1,13 @@
+Run directory: runs_linear\2026-01-09_20-19-52
+Device: cpu
+ep     1 | loss=2.9069e+01 | pde=2.308e-03 bc=9.178e-01 ic=5.037e-01 iv=1.274e-01
+ep   500 | loss=3.8028e-01 | pde=1.455e-01 bc=9.430e-03 ic=1.712e-03 iv=2.385e-03
+ep  1000 | loss=2.9926e-01 | pde=9.396e-02 bc=8.978e-03 ic=1.011e-03 iv=1.105e-03
+ep  1500 | loss=2.5240e-01 | pde=9.090e-02 bc=7.005e-03 ic=9.430e-04 iv=5.083e-04
+ep  2000 | loss=2.2748e-01 | pde=8.430e-02 bc=6.530e-03 ic=3.429e-04 iv=1.142e-03
+ep  2500 | loss=1.9603e-01 | pde=6.580e-02 bc=5.598e-03 ic=5.027e-04 iv=1.644e-03
+ep  3000 | loss=1.7436e-01 | pde=6.280e-02 bc=4.657e-03 ic=5.798e-04 iv=1.363e-03
+ep  3500 | loss=1.8377e-01 | pde=6.646e-02 bc=5.113e-03 ic=1.948e-04 iv=2.232e-03
+ep  4000 | loss=1.5315e-01 | pde=5.452e-02 bc=4.614e-03 ic=2.241e-04 iv=3.723e-04
+
+Saved checkpoint: runs_linear\2026-01-09_20-19-52\pinn_linear.pt
