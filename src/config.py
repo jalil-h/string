@@ -4,11 +4,9 @@ from datetime import datetime
 import json
 import os
 
-
 def make_run_dir(base_dir: str) -> str:
     ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     return os.path.join(base_dir, ts)
-
 
 @dataclass
 class Params:
@@ -51,7 +49,6 @@ class Params:
 
 
 P = Params()
-
 
 def init_run_dir(P: Params) -> str:
     """Create and store a timestamped run directory."""
