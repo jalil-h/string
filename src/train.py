@@ -34,6 +34,7 @@ def train(device=None):
     log(f"Run directory: {run_dir}")
     log(f"Device: {device}")
 
+    # Initialize model and optimizer
     model = MLP(hidden=P.hidden, depth=P.depth).to(device)
     opt = torch.optim.Adam(model.parameters(), lr=P.lr)
 
