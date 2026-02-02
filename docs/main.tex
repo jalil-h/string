@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{verbatim}
+\usepackage{tikz}
+\pgfplotsset{compat=1.18}
+
+
+\title{Physics informed neural network of a moving conductive string in a magnetic field}
+\author{Jalil Hasanyan}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Physical Model}
+Consider an infinite conductive string an a homogeneous magnetic field, $\textbf{B}_0 = B_0 \textbf{i}_x$, where $B_0$ is a constant. The string is being pulled at a constant velocity, $\textbf{V} = V_0 \textbf{i}_x$, through two rings which are located a distance $l$ from each other. The motion of the string is considered in a fixed Cartesian coordinate system $(x,y,z)$, with unit vectors $\textbf{i}_x, \textbf{i}_y, \textbf{i}_z$. The center of one of the rings is assumed to be the center of the coordinate system.
+
+\input{figs/fig_string_schematic}
+
+The influence of gravity and other external forces are neglected. The unit length and the position of each material point of the string is assumed to be constant. We identify the position of each material point of the string through its arc length $s \in [0,l]$. In Euclidean space, we denote the displacement of the string by $\textbf{r}(t,s) = x(t,s) \textbf{i}_x + y(t,s) \textbf{i}_y + z(t,s) \textbf{i}_z$. We also assume that $\textbf{k} = \frac{\partial x }{\partial s} \textbf{i}_x + \frac{\partial y }{\partial s} \textbf{i}_y + \frac{\partial z }{\partial s} \textbf{i}_z$ represents the unit vector directed along the tangent to the deformed line of the string.
+
+
+
+
+The motion of the string generates an induced electric field due to the relative motion of the conductor in the magnetic field. This setup is governed by Faraday's law of induction and the Lorentz force law. The resulting electric field is proportional to the velocity of the string and the strength of the magnetic field. The system is modeled using a set of partial differential equations that describe both the electromagnetic and mechanical behavior of the string.
+
+
+
+
+
+
+\begin{comment}
+Here is an equation:
+\[
+E = mc^2
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xmin=0, xmax=3,
+    ymin=0, ymax=5, 
+    xlabel=$x$,
+    ylabel=$y$,
+    title={Example Plot}, 
+    axis lines=middle]
+\addplot{x^2};
+\addplot coordinates {(0,0) (1,1) (2,2) (3,3)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{comment}
+
+
+
+
+\end{document}
