@@ -19,8 +19,18 @@ Consider an infinite conductive string an a homogeneous magnetic field, $\textbf
 
 \input{figs/fig_string_schematic}
 
-The influence of gravity and other external forces are neglected. The unit length and the position of each material point of the string is assumed to be constant. We identify the position of each material point of the string through its arc length $s \in [0,l]$. In Euclidean space, we denote the displacement of the string by $\textbf{r}(t,s) = x(t,s) \textbf{i}_x + y(t,s) \textbf{i}_y + z(t,s) \textbf{i}_z$. We also assume that $\textbf{k} = \frac{\partial x }{\partial s} \textbf{i}_x + \frac{\partial y }{\partial s} \textbf{i}_y + \frac{\partial z }{\partial s} \textbf{i}_z$ represents the unit vector directed along the tangent to the deformed line of the string.
-
+The influence of gravity and other external forces are neglected. The unit length and the position of each material point of the string is assumed to be constant. We identify the position of each material point of the string through its arc length $s \in [0,l]$. In Euclidean space, we denote the displacement of the string by $\textbf{r}(t,s) = x(t,s) \textbf{i}_x + y(t,s) \textbf{i}_y + z(t,s) \textbf{i}_z$. We also assume that $\textbf{k} = \frac{\partial x }{\partial s} \textbf{i}_x + \frac{\partial y }{\partial s} \textbf{i}_y + \frac{\partial z }{\partial s} \textbf{i}_z$ represents the unit vector directed along the tangent to the deformed line of the string. If we assume a current $\textbf{I} = I_0(t) \textbf{k}$ flows through the string, then the magnetic field will exert forces on the string. In this particular case, the forces acting on the string are called Laplace forces given by
+\begin{equation}
+    \textbf{F} = I_0 B_0 (\textbf{k} \times \textbf{i}_x).
+\end{equation}
+The motion of the string is described by
+\begin{equation}
+    \frac{\partial \textbf{Q}}{\partial s} + \textbf{F} = \rho \textbf{R}, \qquad \textbf{Q} \times \textbf{k} = 0, \qquad \big( \frac{\partial \textbf{r}}{\partial s} \big) = 1,
+\end{equation}
+where $\textbf{Q}$ is the internal tension in the string, $\rho$ is the mass density per unit length, and $\textbf{R}$ is the acceleration of the string given by
+\begin{equation}
+    R_x = 0, \qquad R_y = \frac{\partial^2 y}{\partial t^2} + 2V_0 \frac{\partial^2 y}{\partial s \partial t} + V_0^2 \frac{\partial^2 y}{\partial s^2} + \eta \frac{\partial y}{\partial t}, \qquad R_z = \frac{\partial^2 z}{\partial t^2} + 2V_0 \frac{\partial^2 z}{\partial s \partial t} + V_0^2 \frac{\partial^2 z}{\partial s^2}+ \eta \frac{\partial z}{\partial t}.
+\end{equation}
 
 
 

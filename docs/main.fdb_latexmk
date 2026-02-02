@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1770058457.19454 "c:/Users/jalil/GitRepositories/string/docs/main.tex" "main.pdf" "main" 1770058458.64862 0
+["pdflatex"] 1770059423.44093 "c:/Users/jalil/GitRepositories/string/docs/main.tex" "main.pdf" "main" 1770059424.82589 0
   "C:/Users/jalil/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1770053558 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/jalil/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1770053562 11948314 f264c5ba42066ee32e77a3a3d461cf36 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
@@ -21,6 +21,7 @@
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy8.tfm" 1136765053 1120 8b7d695260f3cff42e636090a8002094 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1247596666 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
+  "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1247596667 30251 6afa5cb1d0204815a708a080681d4674 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1247596667 36281 c355509802a035cadc5f15869451dcee ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
@@ -154,10 +155,10 @@
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/pgfplots/pgfplots.sty" 1621075461 4904 ee78b44e85d6fccf08cd99370557481e ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/tools/verbatim.sty" 1718356376 7532 d2e1111e17bfebb1607d8ffa779705ec ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "c:/Users/jalil/GitRepositories/string/docs/main.tex" 1770058380 2451 8e01fff4c3dc49d34ad1bf3fbcdab924 ""
-  "figs/fig_string_schematic.tex" 1770058456 2351 16cb04018e655bbf58895a237ce6e0b3 ""
-  "main.aux" 1770058458 342 360795fb9b89e7998dfe97becb20e913 "pdflatex"
-  "main.tex" 1770058380 2451 8e01fff4c3dc49d34ad1bf3fbcdab924 ""
+  "c:/Users/jalil/GitRepositories/string/docs/main.tex" 1770059422 3594 0e6c3d6a7705bb96b0f7b06d4b0537a1 ""
+  "figs/fig_string_schematic.tex" 1770058501 2351 16cb04018e655bbf58895a237ce6e0b3 ""
+  "main.aux" 1770059424 342 925cac5bf7b3d55cefba0c5b437e0cc3 "pdflatex"
+  "main.tex" 1770059422 3594 0e6c3d6a7705bb96b0f7b06d4b0537a1 ""
   (generated)
   "main.aux"
   "main.log"
