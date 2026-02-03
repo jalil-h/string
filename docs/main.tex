@@ -5,7 +5,7 @@
 \usepackage{tikz}
 \pgfplotsset{compat=1.18}
 \usepackage[margin=1.25in]{geometry}
-
+\usepackage{bm} 
 
 \title{Physics informed neural network of a moving conductive string in a magnetic field}
 \author{Jalil Hasanyan}
@@ -47,7 +47,7 @@ Using the aforementioned equations, we can obtain the governing equations for la
 \Bigg)
 - i I_0 B_0 u_s,
 \end{align}
-where $0<s<l$ and $P_0 = Q_x$ is the tension applied to the string at rest. The boundary conditions are given by
+where the subscripts represent partial derivatives, $0<s<l$, and $P_0 = Q_x$ is the tension applied to the string at rest. The boundary conditions are given by
 \begin{equation}  
 u(0,t) = 0, \qquad u(l,t) = 0, \qquad t \geq 0.
 \end{equation}
@@ -58,8 +58,118 @@ These boundary conditions specify that the string is fixed at the rings. Initial
 \end{align}
 where $0<s<l$ and $t \geq 0$. 
 
+\section{Physics-Informed Neural Network Formulation}
 
-\section{PINN Formulation}
+To approximate solutions of the governing equation \eqref{4}, we construct a physics-informed neural network (PINN) that represents the transverse displacement of the string.
+
+\subsection{Neural Network Representation}
+
+Let
+\[
+\hat{u}(s,t;\bm{\theta}) = \hat{y}(s,t;\bm{\theta}) + i\,\hat{z}(s,t;\bm{\theta})
+\]
+denote the neural network approximation of the complex displacement
+\[
+u(s,t) = y(s,t) + i z(s,t),
+\]
+where $\bm{\theta}$ represents the trainable parameters (weights and biases) of the network. In practice, the network outputs the two real-valued components $(\hat{y}, \hat{z})$ simultaneously.
+
+The network takes $(s,t)$ as inputs and consists of fully connected layers with smooth activation functions (e.g., $\tanh$) so that spatial and temporal derivatives can be computed via automatic differentiation.
+
+\subsection{Dimensionless Form}
+
+For numerical stability and to reduce the number of physical parameters, we use the nondimensional variables
+\[
+x = \frac{s}{l}, \qquad \tau = \frac{c_0 t}{l}, \qquad c_0 = \sqrt{\frac{P_0}{\rho}},
+\]
+and define
+\[
+\beta = \frac{V_0}{c_0}, \qquad
+\mu = \frac{\eta l}{c_0}, \qquad
+\Gamma = \frac{I_0 B_0 l}{P_0}.
+\]
+
+In these variables, the linearized governing equation \eqref{6} becomes
+\[
+u_{\tau\tau} + \mu u_{\tau} + 2\beta u_{x\tau} + \beta^2 u_{xx}
+=
+u_{xx} - i \Gamma u_x.
+\tag{9}
+\]
+
+Separating real and imaginary parts yields the coupled system
+\begin{align}
+y_{\tau\tau} + \mu y_\tau + 2\beta y_{x\tau} + (\beta^2 - 1) y_{xx} - \Gamma z_x &= 0, \\
+z_{\tau\tau} + \mu z_\tau + 2\beta z_{x\tau} + (\beta^2 - 1) z_{xx} + \Gamma y_x &= 0.
+\end{align}
+
+\subsection{PDE Residual}
+
+The PINN enforces the governing equations by minimizing the residuals
+\begin{align}
+R_y(x,\tau;\bm{\theta}) &=
+\hat{y}_{\tau\tau} + \mu \hat{y}_\tau + 2\beta \hat{y}_{x\tau}
++ (\beta^2 - 1)\hat{y}_{xx} - \Gamma \hat{z}_x, \\
+R_z(x,\tau;\bm{\theta}) &=
+\hat{z}_{\tau\tau} + \mu \hat{z}_\tau + 2\beta \hat{z}_{x\tau}
++ (\beta^2 - 1)\hat{z}_{xx} + \Gamma \hat{y}_x.
+\end{align}
+
+These derivatives are computed using automatic differentiation.
+
+\subsection{Boundary and Initial Conditions}
+
+The boundary conditions \eqref{5} become
+\[
+\hat{y}(0,\tau) = \hat{y}(1,\tau) = 0,
+\qquad
+\hat{z}(0,\tau) = \hat{z}(1,\tau) = 0.
+\]
+
+Initial conditions are imposed as
+\[
+\hat{y}(x,0) = y_0(x), \quad
+\hat{z}(x,0) = z_0(x),
+\]
+\[
+\hat{y}_\tau(x,0) = v_{y,0}(x), \quad
+\hat{z}_\tau(x,0) = v_{z,0}(x).
+\]
+
+\subsection{Loss Function}
+
+Let $\{(x_r^i,\tau_r^i)\}_{i=1}^{N_r}$ denote interior collocation points, $\{\tau_b^i\}_{i=1}^{N_b}$ boundary points, and $\{x_0^i\}_{i=1}^{N_0}$ initial points. The total loss is defined as
+\begin{align}
+\mathcal{L}(\bm{\theta}) =
+&\; \frac{1}{N_r}\sum_{i=1}^{N_r} \left( |R_y(x_r^i,\tau_r^i;\bm{\theta})|^2 + |R_z(x_r^i,\tau_r^i;\bm{\theta})|^2 \right) \\
+&+ \frac{1}{N_b}\sum_{i=1}^{N_b} \left( |\hat{y}(0,\tau_b^i)|^2 + |\hat{y}(1,\tau_b^i)|^2
++ |\hat{z}(0,\tau_b^i)|^2 + |\hat{z}(1,\tau_b^i)|^2 \right) \\
+&+ \frac{1}{N_0}\sum_{i=1}^{N_0} \left( |\hat{y}(x_0^i,0)-y_0(x_0^i)|^2 + |\hat{z}(x_0^i,0)-z_0(x_0^i)|^2 \right) \\
+&+ \frac{1}{N_0}\sum_{i=1}^{N_0} \left( |\hat{y}_\tau(x_0^i,0)-v_{y,0}(x_0^i)|^2 + |\hat{z}_\tau(x_0^i,0)-v_{z,0}(x_0^i)|^2 \right).
+\end{align}
+
+The neural network parameters $\bm{\theta}$ are optimized using gradient-based methods (e.g., Adam) to minimize $\mathcal{L}$.
+
+\subsection{Static PINN for Buckling Equilibria}
+
+To study static buckling equilibria, we consider time-independent solutions of \eqref{9}. Setting all time derivatives to zero yields
+\[
+(\beta^2 - 1)u_{xx} + i\Gamma u_x = 0.
+\]
+
+Splitting into real and imaginary parts gives
+\begin{align}
+(\beta^2 - 1)y_{xx} - \Gamma z_x &= 0, \\
+(\beta^2 - 1)z_{xx} + \Gamma y_x &= 0,
+\end{align}
+subject to
+\[
+y(0)=y(1)=0, \qquad z(0)=z(1)=0.
+\]
+
+A second PINN is constructed with input $x$ only and outputs $(\hat{y}(x),\hat{z}(x))$. The residuals of the above system are minimized together with the boundary conditions. Because the trivial solution $(y,z)=(0,0)$ always satisfies the equations, a small symmetry-breaking constraint (e.g., $\hat{y}(1/2)=A$) is added to select a nontrivial buckled branch.
+
+
 
 
 
