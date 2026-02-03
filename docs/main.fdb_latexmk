@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1770059423.44093 "c:/Users/jalil/GitRepositories/string/docs/main.tex" "main.pdf" "main" 1770059424.82589 0
-  "C:/Users/jalil/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1770053558 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+["pdflatex"] 1770062096.548 "c:/Users/jalil/GitRepositories/string/docs/main.tex" "main.pdf" "main" 1770062097.90873 0
+  "C:/Users/jalil/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1770061554 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/jalil/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1770053562 11948314 f264c5ba42066ee32e77a3a3d461cf36 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233951848 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -30,6 +30,8 @@
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1247596667 32762 7fee39e011c23b3589931effd97b9702 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1247596667 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
+  "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/generic/iftex/iftex.sty" 1643997108 7237 bdd120a32c8fdb4b433cf9ca2e7cd98a ""
+  "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/generic/iftex/ifvtex.sty" 1643997108 1057 525c2192b5febbd8c1f662c9468335bb ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfcore.code.tex" 1673775190 1016 1c2b89187d12a2768764b83b4945667c ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex" 1673775190 43820 1fef971b75380574ab35a0d37fd92608 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex" 1673775190 19324 f4e4c6403dd0f1605fd20ed22fa79dea ""
@@ -133,6 +135,8 @@
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/base/article.cls" 1719393830 20144 67a5f8e0f9e445e8ec6834e595cebdc9 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/base/size10.clo" 1719393830 8448 358bf3de18513f057a13bdc6e6770c41 ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/epstopdf-pkg/epstopdf-base.sty" 1623003186 13886 d1306dcf79a944f6988e688c1785f9ce ""
+  "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/geometry/geometry.cfg" 1578053545 1104 7ac475a4e3466b0b43e138e9356bda83 ""
+  "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/geometry/geometry.sty" 1578053545 42759 9cf6c5257b1bc7af01a58859749dd37a ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/graphics-cfg/color.cfg" 1465894292 1213 620bba36b25224fa9b7e1ccb4ecb76fd ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/graphics-cfg/graphics.cfg" 1465894292 1224 978390e9c2234eab29404bc21b268d1e ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/graphics-def/pdftex.def" 1713599642 19440 9da9dcbb27470349a580fca7372d454b ""
@@ -155,10 +159,10 @@
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/pgfplots/pgfplots.sty" 1621075461 4904 ee78b44e85d6fccf08cd99370557481e ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/tools/verbatim.sty" 1718356376 7532 d2e1111e17bfebb1607d8ffa779705ec ""
   "C:/Users/jalil/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "c:/Users/jalil/GitRepositories/string/docs/main.tex" 1770059422 3594 0e6c3d6a7705bb96b0f7b06d4b0537a1 ""
+  "c:/Users/jalil/GitRepositories/string/docs/main.tex" 1770062094 4505 e9de21e1b7937b0612ae10aa68966263 ""
   "figs/fig_string_schematic.tex" 1770058501 2351 16cb04018e655bbf58895a237ce6e0b3 ""
-  "main.aux" 1770059424 342 925cac5bf7b3d55cefba0c5b437e0cc3 "pdflatex"
-  "main.tex" 1770059422 3594 0e6c3d6a7705bb96b0f7b06d4b0537a1 ""
+  "main.aux" 1770062097 446 28c39aa8e4d52ad4515b627fd42c6d69 "pdflatex"
+  "main.tex" 1770062094 4505 e9de21e1b7937b0612ae10aa68966263 ""
   (generated)
   "main.aux"
   "main.log"

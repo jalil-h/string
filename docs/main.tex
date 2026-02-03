@@ -4,6 +4,7 @@
 \usepackage{verbatim}
 \usepackage{tikz}
 \pgfplotsset{compat=1.18}
+\usepackage[margin=1.25in]{geometry}
 
 
 \title{Physics informed neural network of a moving conductive string in a magnetic field}
@@ -19,7 +20,7 @@ Consider an infinite conductive string an a homogeneous magnetic field, $\textbf
 
 \input{figs/fig_string_schematic}
 
-The influence of gravity and other external forces are neglected. The unit length and the position of each material point of the string is assumed to be constant. We identify the position of each material point of the string through its arc length $s \in [0,l]$. In Euclidean space, we denote the displacement of the string by $\textbf{r}(t,s) = x(t,s) \textbf{i}_x + y(t,s) \textbf{i}_y + z(t,s) \textbf{i}_z$. We also assume that $\textbf{k} = \frac{\partial x }{\partial s} \textbf{i}_x + \frac{\partial y }{\partial s} \textbf{i}_y + \frac{\partial z }{\partial s} \textbf{i}_z$ represents the unit vector directed along the tangent to the deformed line of the string. If we assume a current $\textbf{I} = I_0(t) \textbf{k}$ flows through the string, then the magnetic field will exert forces on the string. In this particular case, the forces acting on the string are called Laplace forces given by
+The influence of gravity and other external forces are neglected. The unit length and the position of each material point of the string is assumed to be constant. We identify the position of each material point of the string through its arc length $s \in [0,l]$. In Euclidean space, we denote the displacement of the string by $\textbf{r}(s,t) = x(s,t) \textbf{i}_x + y(s,t) \textbf{i}_y + z(s,t) \textbf{i}_z$. We also assume that $\textbf{k} = \frac{\partial x }{\partial s} \textbf{i}_x + \frac{\partial y }{\partial s} \textbf{i}_y + \frac{\partial z }{\partial s} \textbf{i}_z$ represents the unit vector directed along the tangent to the deformed line of the string. If we assume a current $\textbf{I} = I_0(t) \textbf{k}$ flows through the string, then the magnetic field will exert forces on the string. In this particular case, the forces acting on the string are called Laplace forces given by
 \begin{equation}
     \textbf{F} = I_0 B_0 (\textbf{k} \times \textbf{i}_x).
 \end{equation}
@@ -27,17 +28,38 @@ The motion of the string is described by
 \begin{equation}
     \frac{\partial \textbf{Q}}{\partial s} + \textbf{F} = \rho \textbf{R}, \qquad \textbf{Q} \times \textbf{k} = 0, \qquad \big( \frac{\partial \textbf{r}}{\partial s} \big) = 1,
 \end{equation}
-where $\textbf{Q}$ is the internal tension in the string, $\rho$ is the mass density per unit length, and $\textbf{R}$ is the acceleration of the string given by
+where $\textbf{Q}$ is the internal tension in the string, $\rho$ is the mass density per unit length, and $\textbf{R}$ is the inertial force of the string given by
 \begin{equation}
-    R_x = 0, \qquad R_y = \frac{\partial^2 y}{\partial t^2} + 2V_0 \frac{\partial^2 y}{\partial s \partial t} + V_0^2 \frac{\partial^2 y}{\partial s^2} + \eta \frac{\partial y}{\partial t}, \qquad R_z = \frac{\partial^2 z}{\partial t^2} + 2V_0 \frac{\partial^2 z}{\partial s \partial t} + V_0^2 \frac{\partial^2 z}{\partial s^2}+ \eta \frac{\partial z}{\partial t}.
+    R_x = 0, \qquad R_y = \frac{\partial^2 y}{\partial t^2} + 2V_0 \frac{\partial^2 y}{\partial s \partial t} + V_0^2 \frac{\partial^2 y}{\partial s^2} + \eta \frac{\partial y}{\partial t}, \qquad R_z = \frac{\partial^2 z}{\partial t^2} + 2V_0 \frac{\partial^2 z}{\partial s \partial t} + V_0^2 \frac{\partial^2 z}{\partial s^2}+ \eta \frac{\partial z}{\partial t},
 \end{equation}
+where $\eta$ is a damping coefficient. The inertial force in the x-direction is zero since we assume that the string is being pulled in the x-direction with a constant velocity. The complex function $u(s,t) = y(s,t) + i z(s,t)$ will be used to represent the displacement of the string in the y and z directions.
 
 
+Using the aforementioned equations, we can obtain the governing equations for lateral vibrations
+\begin{align}
+\rho \Bigg[
+    u_{tt} + \eta u_{t} + 2 V_0 u_{st} + V_0^2 u_{ss}
+\Bigg]
+&= \frac{\partial}{\partial s}
+\Bigg(
+    \frac{P_0 \, u_s}
+    {\sqrt{1 - \lvert u_s \rvert^2}}
+\Bigg)
+- i I_0 B_0 u_s,
+\end{align}
+where $0<s<l$ and $P_0 = Q_x$ is the tension applied to the string at rest. The boundary conditions are given by
+\begin{equation}  
+u(0,t) = 0, \qquad u(l,t) = 0, \qquad t \geq 0.
+\end{equation}
+These boundary conditions specify that the string is fixed at the rings. Initial conditions will be assigned appropriately. if we assume that the deformations are negligibly small, i.e., $\lvert u_s \rvert \ll 1$, then the governing equation can be linearized as
+\begin{align}   
+\frac{\rho}{P_0} \Bigg[
+    u_{tt} + \eta u_{t} + 2 V_0 u_{st} \Bigg] = \Bigg(1 - \frac{\rho V_0^2}{P_0}\Bigg) u_{ss} - i \frac{I_0 B_0}{P_0} u_s,
+\end{align}
+where $0<s<l$ and $t \geq 0$. 
 
-The motion of the string generates an induced electric field due to the relative motion of the conductor in the magnetic field. This setup is governed by Faraday's law of induction and the Lorentz force law. The resulting electric field is proportional to the velocity of the string and the strength of the magnetic field. The system is modeled using a set of partial differential equations that describe both the electromagnetic and mechanical behavior of the string.
 
-
-
+\section{PINN Formulation}
 
 
 
