@@ -172,6 +172,52 @@ A second PINN is constructed with input $x$ only and outputs $(\hat{y}(x),\hat{z
 
 
 
+\section{Appendix: Neural Network as a Composed Function}
+
+The PINN represents the displacement field as a parametric function
+\[
+\hat{u}(s,t;\bm{\theta}) = \hat{y}(s,t;\bm{\theta}) + i\,\hat{z}(s,t;\bm{\theta}),
+\]
+where $\bm{\theta}$ denotes the collection of trainable weights and biases of the neural network. The network takes the space--time coordinates $(s,t)$ as inputs and produces the two transverse displacement components $(\hat{y},\hat{z})$ as outputs.
+
+The neural network is a fully connected feedforward architecture, which can be written as a composition of functions:
+\[
+\hat{\mathbf{w}}(s,t;\bm{\theta})
+= \mathbf{f}_L \circ \mathbf{f}_{L-1} \circ \cdots \circ \mathbf{f}_1 (s,t),
+\]
+where
+\[
+\hat{\mathbf{w}} = 
+\begin{bmatrix}
+\hat{y} \\[4pt]
+\hat{z}
+\end{bmatrix},
+\qquad
+\mathbf{f}_k(\mathbf{h}) = \sigma\!\left(W_k \mathbf{h} + b_k\right).
+\]
+
+Here, $W_k$ and $b_k$ are the weight matrix and bias vector of the $k$-th layer, and $\sigma(\cdot)$ is a smooth activation function applied elementwise. In this work, we use the hyperbolic tangent activation $\sigma(x) = \tanh(x)$, which is infinitely differentiable.
+
+Because the network is a composition of smooth functions, $\hat{\mathbf{w}}(s,t;\bm{\theta})$ is differentiable with respect to both $s$ and $t$. Spatial and temporal derivatives required in the governing equations are therefore obtained using automatic differentiation. This enables direct evaluation of the PDE residuals without finite-difference approximations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \begin{comment}
 Here is an equation:
@@ -194,6 +240,10 @@ E = mc^2
 \end{tikzpicture}
 \end{center}
 \end{comment}
+
+
+
+
 
 
 

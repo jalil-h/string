@@ -1,0 +1,224 @@
+# pinn_poisson_1d.py
+# PINN for: -u''(x) = pi^2 sin(pi x), x in [-1,1], u(-1)=u(1)=0
+# Exact: u(x) = sin(pi x)
+
+import math
+import time
+import numpy as np
+import torch
+import torch.nn as nn
+import matplotlib.pyplot as plt
+
+# ----------------------------
+# Config
+# ----------------------------
+class Config:
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    seed = 1234
+
+    # Domain
+    x_min = -1.0
+    x_max =  1.0
+
+    # Sampling
+    n_collocation = 2000   # interior points for PDE residual
+    n_boundary = 200       # boundary points (we'll sample at x=-1 and x=1)
+    resample_every = 50    # resample collocation points every N epochs
+
+    # Network
+    layers = [1, 64, 64, 64, 1]
+    activation = "tanh"
+
+    # Training
+    epochs_adam = 3000
+    lr = 1e-3
+    weight_pde = 1.0
+    weight_bc = 100.0      # BCs usually need heavier weight
+
+    # Optional refinement with L-BFGS (often helps PINNs converge)
+    use_lbfgs = True
+    lbfgs_max_iter = 500
+
+    # Plot
+    n_plot = 400
+
+
+# ----------------------------
+# Utils
+# ----------------------------
+def set_seed(seed: int):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+
+def exact_u(x: torch.Tensor) -> torch.Tensor:
+    return torch.sin(math.pi * x)
+
+def rhs_f(x: torch.Tensor) -> torch.Tensor:
+    # -u'' = pi^2 sin(pi x)
+    return (math.pi ** 2) * torch.sin(math.pi * x)
+
+def make_mlp(layer_sizes, activation="tanh"):
+    acts = {
+        "tanh": nn.Tanh(),
+        "relu": nn.ReLU(),
+        "gelu": nn.GELU(),
+        "silu": nn.SiLU(),
+    }
+    act = acts.get(activation.lower(), nn.Tanh())
+
+    layers = []
+    for i in range(len(layer_sizes) - 2):
+        layers += [nn.Linear(layer_sizes[i], layer_sizes[i+1]), act]
+    layers += [nn.Linear(layer_sizes[-2], layer_sizes[-1])]
+    return nn.Sequential(*layers)
+
+def sample_collocation(cfg: Config, device: str):
+    # interior points in (x_min, x_max)
+    x = torch.rand(cfg.n_collocation, 1, device=device) * (cfg.x_max - cfg.x_min) + cfg.x_min
+    x.requires_grad_(True)
+    return x
+
+def sample_boundary(cfg: Config, device: str):
+    # sample boundary points at x=-1 and x=1 (repeat)
+    # shape: [n_boundary, 1]
+    n2 = cfg.n_boundary // 2
+    xb1 = torch.full((n2, 1), cfg.x_min, device=device)
+    xb2 = torch.full((cfg.n_boundary - n2, 1), cfg.x_max, device=device)
+    xb = torch.cat([xb1, xb2], dim=0)
+    xb.requires_grad_(True)
+    ub = torch.zeros_like(xb)
+    return xb, ub
+
+def grad(outputs, inputs):
+    return torch.autograd.grad(
+        outputs=outputs,
+        inputs=inputs,
+        grad_outputs=torch.ones_like(outputs),
+        create_graph=True,
+        retain_graph=True,
+        only_inputs=True
+    )[0]
+
+
+# ----------------------------
+# PINN Losses
+# ----------------------------
+def pde_residual(model: nn.Module, x: torch.Tensor) -> torch.Tensor:
+    # residual r(x) = -u''(x) - f(x) = 0
+    u = model(x)
+    u_x = grad(u, x)
+    u_xx = grad(u_x, x)
+    r = -u_xx - rhs_f(x)
+    return r
+
+def compute_loss(cfg: Config, model: nn.Module, x_f: torch.Tensor, x_b: torch.Tensor, u_b: torch.Tensor):
+    r = pde_residual(model, x_f)
+    loss_pde = torch.mean(r**2)
+
+    u_pred_b = model(x_b)
+    loss_bc = torch.mean((u_pred_b - u_b)**2)
+
+    loss = cfg.weight_pde * loss_pde + cfg.weight_bc * loss_bc
+    return loss, loss_pde.detach(), loss_bc.detach()
+
+
+# ----------------------------
+# Train
+# ----------------------------
+def main():
+    cfg = Config()
+    set_seed(cfg.seed)
+
+    device = cfg.device
+    print(f"Device: {device}")
+
+    model = make_mlp(cfg.layers, cfg.activation).to(device)
+
+    # Initial samples
+    x_f = sample_collocation(cfg, device)
+    x_b, u_b = sample_boundary(cfg, device)
+
+    opt = torch.optim.Adam(model.parameters(), lr=cfg.lr)
+
+    t0 = time.time()
+    for epoch in range(1, cfg.epochs_adam + 1):
+        if (epoch % cfg.resample_every) == 1:
+            x_f = sample_collocation(cfg, device)
+            x_b, u_b = sample_boundary(cfg, device)
+
+        opt.zero_grad(set_to_none=True)
+        loss, loss_pde, loss_bc = compute_loss(cfg, model, x_f, x_b, u_b)
+        loss.backward()
+        opt.step()
+
+        if epoch % 200 == 0 or epoch == 1:
+            print(f"[Adam {epoch:5d}/{cfg.epochs_adam}] "
+                  f"loss={loss.item():.3e}  pde={loss_pde.item():.3e}  bc={loss_bc.item():.3e}")
+
+    if cfg.use_lbfgs:
+        # Re-sample (often helps LBFGS)
+        x_f = sample_collocation(cfg, device)
+        x_b, u_b = sample_boundary(cfg, device)
+
+        def closure():
+            opt_lbfgs.zero_grad(set_to_none=True)
+            loss, _, _ = compute_loss(cfg, model, x_f, x_b, u_b)
+            loss.backward()
+            return loss
+
+        opt_lbfgs = torch.optim.LBFGS(
+            model.parameters(),
+            lr=1.0,
+            max_iter=cfg.lbfgs_max_iter,
+            tolerance_grad=1e-10,
+            tolerance_change=1e-12,
+            history_size=100,
+            line_search_fn="strong_wolfe",
+        )
+
+        loss_before, lp_before, lb_before = compute_loss(cfg, model, x_f, x_b, u_b)
+        print(f"[LBFGS start] loss={loss_before.item():.3e} pde={lp_before.item():.3e} bc={lb_before.item():.3e}")
+        opt_lbfgs.step(closure)
+        loss_after, lp_after, lb_after = compute_loss(cfg, model, x_f, x_b, u_b)
+        print(f"[LBFGS end]   loss={loss_after.item():.3e} pde={lp_after.item():.3e} bc={lb_after.item():.3e}")
+
+    t1 = time.time()
+    print(f"Training time: {t1 - t0:.2f} s")
+
+    # ----------------------------
+    # Evaluate + Plot
+    # ----------------------------
+    x_plot = torch.linspace(cfg.x_min, cfg.x_max, cfg.n_plot, device=device).view(-1, 1)
+    with torch.no_grad():
+        u_pred = model(x_plot)
+        u_true = exact_u(x_plot)
+        err_l2 = torch.sqrt(torch.mean((u_pred - u_true) ** 2)).item()
+        rel_l2 = (torch.sqrt(torch.mean((u_pred - u_true) ** 2)) / torch.sqrt(torch.mean(u_true ** 2))).item()
+
+    print(f"L2 error      : {err_l2:.3e}")
+    print(f"Relative L2 err: {rel_l2:.3e}")
+
+    x_np = x_plot.detach().cpu().numpy().flatten()
+    u_pred_np = u_pred.detach().cpu().numpy().flatten()
+    u_true_np = u_true.detach().cpu().numpy().flatten()
+
+    plt.figure()
+    plt.plot(x_np, u_true_np, label="Exact: sin(pi x)")
+    plt.plot(x_np, u_pred_np, "--", label="PINN")
+    plt.xlabel("x")
+    plt.ylabel("u(x)")
+    plt.legend()
+    plt.title("1D Poisson PINN")
+
+    plt.figure()
+    plt.plot(x_np, (u_pred_np - u_true_np))
+    plt.xlabel("x")
+    plt.ylabel("u_pred - u_exact")
+    plt.title("Pointwise error")
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
